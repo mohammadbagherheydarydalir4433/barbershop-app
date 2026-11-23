@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>پنل مدیریت آرایشگاه مدرن</title>
+  <style>
+    @font-face {
+      font-family: "Doran Berman";
+      src:
+        local("Doran Berman"),
+        local("DoranBerman"),
+        local("Berman"),
+        url("./DoranBerman.woff2") format("woff2"),
+        url("./DoranBerman.ttf") format("truetype");
+      font-weight: 400 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", "IRANSans", "Vazirmatn", Tahoma, sans-serif;
+    }
+
+    .num-font {
+      font-family: "Doran Berman", "Segoe UI", Tahoma, sans-serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.4px;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(16, 185, 129, 0.16), transparent 42%),
+        radial-gradient(circle at 15% 90%, rgba(5, 150, 105, 0.14), transparent 45%),
+        #050706;
+      color: #34d399;
+      padding: 28px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 820px;
+      background: #0b0f0d;
+      border: 1px solid rgba(16, 185, 129, 0.28);
+      border-radius: 24px;
+      padding: 26px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+
+    .shop-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(5, 150, 105, 0.06));
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 16px;
+      padding: 13px 16px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .shop-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 21px;
+      color: #34d399;
+    }
+
+    p.subtitle {
+      margin: 0 0 18px;
+      color: #6ee7b7;
+      font-size: 13.5px;
+      opacity: 0.9;
+    }
+
+    .auth-box {
+      max-width: 410px;
+      margin: 20px auto;
+      background: #101613;
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      padding: 9px 10px;
+      border-radius: 11px;
+      border: 1px solid rgba(52, 211, 153, 0.24);
+      background: #070a08;
+      color: #6ee7b7;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #34d399;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(52, 211, 153, 0.24);
+      background: #070a08;
+      color: #34d399;
+      font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 11px;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      background: #101613;
+      color: #34d399;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: rgba(16, 185, 129, 0.16);
+    }
+
+    .btn-primary {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px;
+      border: none;
+      background: linear-gradient(135deg, #10b981, #34d399);
+      color: #04100b;
+      font-size: 14.5px;
+    }
+
+    .hint-text {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #6ee7b7;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      background: #101613;
+      border: 1px solid rgba(52, 211, 153, 0.18);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .toolbar select {
+      width: auto;
+      min-width: 150px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: #101613;
+      border: 1px solid rgba(52, 211, 153, 0.16);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 20px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #6ee7b7;
+      margin-top: 4px;
+    }
+
+    .appt-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .appt-card {
+      background: #101613;
+      border: 1px solid rgba(52, 211, 153, 0.18);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .appt-info h3 {
+      margin: 0 0 6px;
+      font-size: 15.5px;
+      color: #34d399;
+    }
+
+    .appt-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 13px;
+      color: #6ee7b7;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-pending {
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+    }
+
+    .badge-confirmed {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid #10b981;
+      color: #34d399;
+    }
+
+    .badge-cancelled {
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+    }
+
+    .appt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-confirm {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    .btn-cancel {
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .msg {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .msg.err {
+      display: block;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+    }
+
+    .msg.ok {
+      display: block;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 18px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="shop-banner">
+      <p class="shop-name">آرایشگاه مدرن</p>
+    </div>
+
+    <!-- بخش ساخت حساب و ورود آرایشگر -->
+    <div id="loginSection" class="auth-box">
+      <h1>پنل آرایشگر</h1>
+      <p class="subtitle">حساب کاربری آرایشگر بسازید یا با حساب خود وارد شوید.</p>
+
+      <div class="mode-tabs">
+        <button type="button" id="tabRegister" class="tab-btn active">ساخت حساب</button>
+        <button type="button" id="tabLogin" class="tab-btn">ورود به حساب</button>
+      </div>
+
+      <!-- فرم ساخت یا تغییر نام کاربری و رمز عبور -->
+      <form id="registerForm">
+        <div class="field">
+          <label for="newUsername">نام کاربری</label>
+          <input type="text" id="newUsername" placeholder="یک نام کاربری انتخاب کنید" required />
+        </div>
+        <div class="field">
+          <label for="newPassword">رمز عبور</label>
+          <input type="password" id="newPassword" placeholder="حداقل ۴ کاراکتر" required />
+        </div>
+        <div class="field">
+          <label for="confirmPassword">تکرار رمز عبور</label>
+          <input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید" required />
+        </div>
+        <button type="submit" class="btn btn-primary">ثبت حساب کاربری</button>
+        <div class="hint-text">حساب کاربری شما روی همین مرورگر ذخیره می‌شود تا در مراجعات بعدی وارد شوید.</div>
+      </form>
+
+      <!-- فرم ورود -->
+      <form id="loginForm" class="hidden">
+        <div class="field">
+          <label for="loginUsername">نام کاربری</label>
+          <input type="text" id="loginUsername" placeholder="نام کاربری خود را وارد کنید" required />
+        </div>
+        <div class="field">
+          <label for="loginPassword">رمز عبور</label>
+          <input type="password" id="loginPassword" placeholder="رمز عبور خود را وارد کنید" required />
+        </div>
+        <button type="submit" class="btn btn-primary">ورود به پنل</button>
+      </form>
+
+      <div id="authMsg" class="msg"></div>
+    </div>
+
+    <!-- بخش داشبورد نوبت‌ها -->
+    <div id="dashboardSection" class="hidden">
+      <h1>مدیریت نوبت‌های مشتریان</h1>
+      <p class="subtitle">خوش آمدید، <span id="activeUserLabel" style="font-weight:700"></span> — لیست نوبت‌ها به ترتیب تاریخ و ساعت نمایش داده می‌شود.</p>
+
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <select id="statusFilter">
+            <option value="all">همه وضعیت‌ها</option>
+            <option value="active" selected>فقط فعال (در انتظار و تاییدشده)</option>
+            <option value="pending">در انتظار تایید</option>
+            <option value="confirmed">تایید شده</option>
+            <option value="cancelled">لغو شده</option>
+          </select>
+          <button type="button" id="refreshBtn" class="btn">بروزرسانی لیست</button>
+        </div>
+        <button type="button" id="logoutBtn" class="btn">خروج</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div id="totalCount" class="stat-num num-font">0</div>
+          <div class="stat-label">کل نوبت‌ها</div>
+        </div>
+        <div class="stat-card">
+          <div id="pendingCount" class="stat-num num-font">0</div>
+          <div class="stat-label">در انتظار تایید</div>
+        </div>
+        <div class="stat-card">
+          <div id="confirmedCount" class="stat-num num-font">0</div>
+          <div class="stat-label">تایید شده</div>
+        </div>
+      </div>
+
+      <div id="panelMsg" class="msg"></div>
+      <div id="apptList" class="appt-list"></div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://dwxftukclquqqggmydjo.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_P1DYzPj2ipuIuH931KIdLQ_MYgQ4FsS";
+
+    const CRED_STORAGE_KEY = "barbershop_modern_admin_cred";
+
+    const JALALI_MONTHS = [
+      "فروردین", "اردیبهشت", "خرداد",
+      "تیر", "مرداد", "شهریور",
+      "مهر", "آبان", "آذر",
+      "دی", "بهمن", "اسفند"
+    ];
+
+    const headers = {
+      "apikey": SUPABASE_KEY,
+      "Authorization": "Bearer " + SUPABASE_KEY,
+      "Content-Type": "application/json"
+    };
+
+    let servicesMap = {};
+    let allAppointments = [];
+
+    const loginSection = document.getElementById("loginSection");
+    const dashboardSection = document.getElementById("dashboardSection");
+    const tabLogin = document.getElementById("tabLogin");
+    const tabRegister = document.getElementById("tabRegister");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const authMsg = document.getElementById("authMsg");
+    const panelMsg = document.getElementById("panelMsg");
+    const statusFilter = document.getElementById("statusFilter");
+    const apptList = document.getElementById("apptList");
+    const activeUserLabel = document.getElementById("activeUserLabel");
+
+    function getSavedCred() {
+      try {
+        const raw = localStorage.getItem(CRED_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.username && parsed.password) {
+          return { username: String(parsed.username), password: String(parsed.password) };
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function saveCred(username, password) {
+      localStorage.setItem(CRED_STORAGE_KEY, JSON.stringify({ username: username, password: password }));
+    }
+
+    function switchMode(mode) {
+      authMsg.className = "msg";
+      if (mode === "register") {
+        tabRegister.classList.add("active");
+        tabLogin.classList.remove("active");
+        registerForm.classList.remove("hidden");
+        loginForm.classList.add("hidden");
+      } else {
+        tabLogin.classList.add("active");
+        tabRegister.classList.remove("active");
+        loginForm.classList.remove("hidden");
+        registerForm.classList.add("hidden");
+      }
+    }
+
+    tabLogin.addEventListener("click", function () { switchMode("login"); });
+    tabRegister.addEventListener("click", function () { switchMode("register"); });
+
+    function div(a, b) {
+      return Math.trunc(a / b);
+    }
+
+    function gregorianToJalali(gy, gm, gd) {
+      const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+      let gy2 = gm > 2 ? gy + 1 : gy;
+      let days = 355666 + (365 * gy) + div(gy2 + 3, 4) - div(gy2 + 99, 100) + div(gy2 + 399, 400) + gd + g_d_m[gm - 1];
+      let jy = -1595 + (33 * div(days, 12053));
+      days %= 12053;
+      jy += 4 * div(days, 1461);
+      days %= 1461;
+      if (days > 365) {
+        jy += div(days - 1, 365);
+        days = (days - 1) % 365;
+      }
+      let jm, jd;
+      if (days < 186) {
+        jm = 1 + div(days, 31);
+        jd = 1 + (days % 31);
+      } else {
+        jm = 7 + div(days - 186, 30);
+        jd = 1 + ((days - 186) % 30);
+      }
+      return [jy, jm, jd];
+    }
+
+    function pad2(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+
+    function formatGregorianToJalaliText(isoDate) {
+      if (!isoDate) return "-";
+      const parts = isoDate.split("-");
+      if (parts.length !== 3) return isoDate;
+      const j = gregorianToJalali(Number(parts[0]), Number(parts[1]), Number(parts[2]));
+      return j[0] + "/" + pad2(j[1]) + "/" + pad2(j[2]) + " (" + j[2] + " " + JALALI_MONTHS[j[1] - 1] + ")";
+    }
+
+    function showMsg(el, text, isError) {
+      el.textContent = text;
+      el.className = "msg " + (isError ? "err" : "ok");
+    }
+
+    async function loadServicesMap() {
+      try {
+        const res = await fetch(SUPABASE_URL + "/rest/v1/services?select=id,title", { headers: headers });
+        if (!res.ok) return;
+        const rows = await res.json();
+        servicesMap = {};
+        for (let i = 0; i < rows.length; i++) {
+          servicesMap[rows[i].id] = rows[i].title;
+        }
+      } catch (e) {}
+    }
+
+    async function loadAppointments() {
+      panelMsg.className = "msg";
+      apptList.innerHTML = "<p style='color:#6ee7b7'>در حال بارگذاری نوبت‌ها...</p>";
+      try {
+        const url = SUPABASE_URL + "/rest/v1/appointments?select=*&order=appt_date.desc,start_time.asc";
+        const res = await fetch(url, { headers: headers });
+        if (!res.ok) throw new Error("خطا در خواندن نوبت‌ها از دیتابیس");
+        allAppointments = await res.json();
+        updateStats();
+        renderAppointments();
+      } catch (err) {
+        apptList.innerHTML = "";
+        showMsg(panelMsg, "امکان دریافت لیست نوبت‌ها وجود ندارد. دسترسی جدول appointments را بررسی کنید.", true);
+      }
+    }
+
+    function updateStats() {
+      let pending = 0;
+      let confirmed = 0;
+      for (let i = 0; i < allAppointments.length; i++) {
+        if (allAppointments[i].status === "pending") pending++;
+        if (allAppointments[i].status === "confirmed") confirmed++;
+      }
+      document.getElementById("totalCount").textContent = allAppointments.length;
+      document.getElementById("pendingCount").textContent = pending;
+      document.getElementById("confirmedCount").textContent = confirmed;
+    }
+
+    function statusBadge(status) {
+      if (status === "confirmed") return '<span class="badge badge-confirmed">تایید شده</span>';
+      if (status === "cancelled") return '<span class="badge badge-cancelled">لغو شده</span>';
+      return '<span class="badge badge-pending">در انتظار تایید</span>';
+    }
+
+    function renderAppointments() {
+      const filter = statusFilter.value;
+      const filtered = allAppointments.filter(function (a) {
+        if (filter === "all") return true;
+        if (filter === "active") return a.status === "pending" || a.status === "confirmed";
+        return a.status === filter;
+      });
+
+      if (filtered.length === 0) {
+        apptList.innerHTML = "<div class='appt-card'><p style='margin:0;color:#6ee7b7'>نوبتی با این فیلتر یافت نشد.</p></div>";
+        return;
+      }
+
+      apptList.innerHTML = "";
+      for (let i = 0; i < filtered.length; i++) {
+        const item = filtered[i];
+        const serviceName = servicesMap[item.service_id] || ("خدمت شماره " + item.service_id);
+        const jDate = formatGregorianToJalaliText(item.appt_date);
+        const timeText = (item.start_time || "").slice(0, 5);
+
+        const card = document.createElement("div");
+        card.className = "appt-card";
+        card.innerHTML =
+          '<div class="appt-info">' +
+            '<h3>' + item.customer_name + ' — ' + serviceName + '</h3>' +
+            '<div class="appt-meta num-font">' +
+              '<span>تاریخ: ' + jDate + '</span>' +
+              '<span>ساعت: ' + timeText + '</span>' +
+              '<span>تماس: <a href="tel:' + item.phone + '" style="color:#34d399">' + item.phone + '</a></span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="appt-actions">' +
+            statusBadge(item.status) +
+            (item.status !== "confirmed" ? '<button type="button" class="btn btn-confirm" data-id="' + item.id + '" data-status="confirmed">تایید</button>' : '') +
+            (item.status !== "cancelled" ? '<button type="button" class="btn btn-cancel" data-id="' + item.id + '" data-status="cancelled">لغو</button>' : '') +
+          '</div>';
+
+        apptList.appendChild(card);
+      }
+
+      const actionBtns = apptList.querySelectorAll("button[data-id]");
+      for (let k = 0; k < actionBtns.length; k++) {
+        actionBtns[k].addEventListener("click", async function () {
+          const id = this.getAttribute("data-id");
+          const nextStatus = this.getAttribute("data-status");
+          await updateAppointmentStatus(id, nextStatus);
+        });
+      }
+    }
+
+    async function updateAppointmentStatus(id, nextStatus) {
+      try {
+        const res = await fetch(SUPABASE_URL + "/rest/v1/appointments?id=eq." + encodeURIComponent(id), {
+          method: "PATCH",
+          headers: headers,
+          body: JSON.stringify({ status: nextStatus })
+        });
+        if (!res.ok) throw new Error("خطا در بروزرسانی وضعیت");
+        showMsg(panelMsg, nextStatus === "confirmed" ? "نوبت تایید شد." : "نوبت لغو شد و ساعت آن دوباره آزاد شد.", false);
+        await loadAppointments();
+      } catch (err) {
+        showMsg(panelMsg, "تغییر وضعیت نوبت انجام نشد.", true);
+      }
+    }
+
+    async function enterDashboard(username) {
+      activeUserLabel.textContent = username;
+      loginSection.classList.add("hidden");
+      dashboardSection.classList.remove("hidden");
+      await loadServicesMap();
+      await loadAppointments();
+    }
+
+    loginForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const u = document.getElementById("loginUsername").value.trim();
+      const p = document.getElementById("loginPassword").value;
+      const saved = getSavedCred();
+
+      if (!saved) {
+        showMsg(authMsg, "هنوز حساب کاربری ساخته نشده است. ابتدا در تب «ساخت حساب» ثبت‌نام کنید.", true);
+        return;
+      }
+
+      if (u === saved.username && p === saved.password) {
+        sessionStorage.setItem("barber_admin_auth", u);
+        authMsg.className = "msg";
+        await enterDashboard(u);
+      } else {
+        showMsg(authMsg, "نام کاربری یا رمز عبور اشتباه است.", true);
+      }
+    });
+
+    registerForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const u = document.getElementById("newUsername").value.trim();
+      const p1 = document.getElementById("newPassword").value;
+      const p2 = document.getElementById("confirmPassword").value;
+
+      if (u.length < 3) {
+        showMsg(authMsg, "نام کاربری باید حداقل ۳ کاراکتر باشد.", true);
+        return;
+      }
+      if (p1.length < 4) {
+        showMsg(authMsg, "رمز عبور باید حداقل ۴ کاراکتر باشد.", true);
+        return;
+      }
+      if (p1 !== p2) {
+        showMsg(authMsg, "رمز عبور و تکرار آن یکسان نیستند.", true);
+        return;
+      }
+
+      saveCred(u, p1);
+      registerForm.reset();
+      document.getElementById("loginUsername").value = u;
+      document.getElementById("loginPassword").value = "";
+      switchMode("login");
+      showMsg(authMsg, "حساب کاربری «" + u + "» با موفقیت ثبت شد. اکنون وارد شوید.", false);
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      sessionStorage.removeItem("barber_admin_auth");
+      dashboardSection.classList.add("hidden");
+      loginSection.classList.remove("hidden");
+      document.getElementById("loginPassword").value = "";
+      switchMode("login");
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadAppointments);
+    statusFilter.addEventListener("change", renderAppointments);
+
+    const activeSessionUser = sessionStorage.getItem("barber_admin_auth");
+    if (activeSessionUser) {
+      enterDashboard(activeSessionUser);
+    } else if (getSavedCred()) {
+      switchMode("login");
+    }
+  </script>
+</body>
+</html>

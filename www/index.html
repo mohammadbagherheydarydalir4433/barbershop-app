@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سامانه آنلاین نوبت‌دهی آرایشگاه</title>
+  <style>
+    @font-face {
+      font-family: "Doran Berman";
+      src:
+        local("Doran Berman"),
+        local("DoranBerman"),
+        local("Berman"),
+        url("./DoranBerman.woff2") format("woff2"),
+        url("./DoranBerman.ttf") format("truetype");
+      font-weight: 400 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", "IRANSans", "Vazirmatn", Tahoma, sans-serif;
+    }
+
+    .num-font,
+    #jYear,
+    #jDay,
+    #jalaliPreview,
+    .slot-btn,
+    #phoneInput {
+      font-family: "Doran Berman", "Segoe UI", Tahoma, sans-serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.4px;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(16, 185, 129, 0.16), transparent 42%),
+        radial-gradient(circle at 15% 90%, rgba(5, 150, 105, 0.14), transparent 45%),
+        #050706;
+      color: #34d399;
+      padding: 28px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      background: #0b0f0d;
+      border: 1px solid rgba(16, 185, 129, 0.28);
+      border-radius: 24px;
+      padding: 26px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+
+    .shop-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(5, 150, 105, 0.06));
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 16px;
+      padding: 13px 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .shop-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .header-box {
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px dashed rgba(52, 211, 153, 0.25);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    p.subtitle {
+      margin: 0;
+      color: #6ee7b7;
+      font-size: 13.5px;
+      opacity: 0.9;
+    }
+
+    .top-row {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .section-card {
+      background: #101613;
+      border: 1px solid rgba(52, 211, 153, 0.16);
+      border-radius: 16px;
+      padding: 15px 16px;
+      margin-bottom: 14px;
+    }
+
+    .top-row .section-card {
+      margin-bottom: 0;
+      height: 100%;
+    }
+
+    .field {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      background: #070a08;
+      color: #34d399;
+      font-size: 13.5px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+    }
+
+    input::placeholder {
+      color: rgba(52, 211, 153, 0.45);
+    }
+
+    .jalali-row {
+      display: grid;
+      grid-template-columns: 0.95fr 1.45fr 0.9fr;
+      gap: 8px;
+    }
+
+    .jalali-hint {
+      margin-top: 9px;
+      font-size: 12px;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.28);
+      padding: 5px 11px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .slot-btn {
+      padding: 10px 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      background: #070a08;
+      color: #34d399;
+      cursor: pointer;
+      font-size: 13.5px;
+      transition: all 0.18s ease;
+    }
+
+    .slot-btn:hover:not(:disabled) {
+      border-color: #34d399;
+      background: rgba(16, 185, 129, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .slot-btn.active {
+      background: #10b981;
+      color: #04100b;
+      border-color: #10b981;
+      font-weight: 700;
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+    }
+
+    .slot-btn:disabled {
+      opacity: 0.36;
+      cursor: not-allowed;
+      text-decoration: line-through;
+      color: #6ee7b7;
+      background: #0b0e0c;
+    }
+
+    button.submit-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #10b981, #34d399);
+      color: #04100b;
+      font-size: 15.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    button.submit-btn:hover:not(:disabled) {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .msg {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      display: none;
+    }
+
+    .msg.ok {
+      display: block;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+    }
+
+    .msg.err {
+      display: block;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+    }
+
+    @media (max-width: 640px) {
+      .top-row {
+        grid-template-columns: 1fr;
+      }
+      .slots {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .container {
+        padding: 20px 16px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="shop-banner">
+      <p id="barbershopName" class="shop-name">آرایشگاه مدرن</p>
+    </div>
+
+    <div class="header-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px;">
+        <h1 style="margin:0;">رزرو نوبت آنلاین آرایشگاه</h1>
+        <a href="./admin.html" style="color:#34d399; text-decoration:none; font-size:12.5px; background:rgba(16,185,129,0.14); border:1px solid rgba(52,211,153,0.3); padding:6px 11px; border-radius:10px; white-space:nowrap;">پنل آرایشگر</a>
+      </div>
+      <p class="subtitle">خدمت، تاریخ شمسی و ساعت آزاد را انتخاب کنید تا نوبت شما ثبت شود.</p>
+      
+      
+    </div>
+
+    <form id="bookingForm">
+      <div class="top-row">
+        <div class="section-card">
+          <div class="field">
+            <label for="serviceSelect">نوع خدمت</label>
+            <select id="serviceSelect" required>
+              <option value="">انتخاب کنید...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="field">
+            <label>تاریخ نوبت (شمسی)</label>
+            <div class="jalali-row">
+              <select id="jYear" aria-label="سال شمسی"></select>
+              <select id="jMonth" aria-label="ماه شمسی"></select>
+              <select id="jDay" aria-label="روز شمسی"></select>
+            </div>
+            <div id="jalaliPreview" class="jalali-hint"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="field">
+          <label>ساعت‌های روز (ساعت‌های خط‌خورده رزرو شده‌اند)</label>
+          <div id="slotsContainer" class="slots"></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="field">
+          <label for="customerName">نام و نام خانوادگی</label>
+          <input type="text" id="customerName" placeholder="مثلاً علی رضایی" required />
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="field">
+          <label for="phoneInput">شماره تماس</label>
+          <input type="tel" id="phoneInput" placeholder="مثلاً 09123456789" required />
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn" class="submit-btn">ثبت نهایی نوبت</button>
+      <div id="statusMsg" class="msg"></div>
+    </form>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://dwxftukclquqqggmydjo.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_P1DYzPj2ipuIuH931KIdLQ_MYgQ4FsS";
+
+    const WORK_SLOTS = [
+      "09:00:00", "09:30:00",
+      "10:00:00", "10:30:00", "11:00:00", "11:30:00",
+      "12:00:00", "12:30:00", "16:00:00", "16:30:00",
+      "17:00:00", "17:30:00", "18:00:00", "18:30:00"
+    ];
+
+    const JALALI_MONTHS = [
+      "فروردین", "اردیبهشت", "خرداد",
+      "تیر", "مرداد", "شهریور",
+      "مهر", "آبان", "آذر",
+      "دی", "بهمن", "اسفند"
+    ];
+
+    let selectedTime = "";
+
+    const serviceSelect = document.getElementById("serviceSelect");
+    const jYear = document.getElementById("jYear");
+    const jMonth = document.getElementById("jMonth");
+    const jDay = document.getElementById("jDay");
+    const jalaliPreview = document.getElementById("jalaliPreview");
+    const slotsContainer = document.getElementById("slotsContainer");
+    const bookingForm = document.getElementById("bookingForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusMsg = document.getElementById("statusMsg");
+
+    const headers = {
+      "apikey": SUPABASE_KEY,
+      "Authorization": "Bearer " + SUPABASE_KEY,
+      "Content-Type": "application/json"
+    };
+
+    function showMessage(text, isError) {
+      statusMsg.textContent = text;
+      statusMsg.className = "msg " + (isError ? "err" : "ok");
+    }
+
+    function div(a, b) {
+      return Math.trunc(a / b);
+    }
+
+    function gregorianToJalali(gy, gm, gd) {
+      const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+      let gy2 = gm > 2 ? gy + 1 : gy;
+      let days = 355666 + (365 * gy) + div(gy2 + 3, 4) - div(gy2 + 99, 100) + div(gy2 + 399, 400) + gd + g_d_m[gm - 1];
+      let jy = -1595 + (33 * div(days, 12053));
+      days %= 12053;
+      jy += 4 * div(days, 1461);
+      days %= 1461;
+      if (days > 365) {
+        jy += div(days - 1, 365);
+        days = (days - 1) % 365;
+      }
+      let jm, jd;
+      if (days < 186) {
+        jm = 1 + div(days, 31);
+        jd = 1 + (days % 31);
+      } else {
+        jm = 7 + div(days - 186, 30);
+        jd = 1 + ((days - 186) % 30);
+      }
+      return [jy, jm, jd];
+    }
+
+    function isJalaliLeap(jy) {
+      const r = jy % 33;
+      return [1, 5, 9, 13, 17, 22, 26, 30].indexOf(r) !== -1;
+    }
+
+    function jalaliMonthLength(jy, jm) {
+      if (jm <= 6) return 31;
+      if (jm <= 11) return 30;
+      return isJalaliLeap(jy) ? 30 : 29;
+    }
+
+    function jalaliToGregorian(jy, jm, jd) {
+      jy += 1595;
+      let days = -355668 + (365 * jy) + (div(jy, 33) * 8) + div(((jy % 33) + 3), 4) + jd;
+      if (jm < 7) {
+        days += (jm - 1) * 31;
+      } else {
+        days += ((jm - 7) * 30) + 186;
+      }
+      let gy = 400 * div(days, 146097);
+      days %= 146097;
+      if (days > 36524) {
+        days--;
+        gy += 100 * div(days, 36524);
+        days %= 36524;
+        if (days >= 365) days++;
+      }
+      gy += 4 * div(days, 1461);
+      days %= 1461;
+      if (days > 365) {
+        gy += div(days - 1, 365);
+        days = (days - 1) % 365;
+      }
+      let gd = days + 1;
+      const isLeap = (gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0);
+      const sal_a = [0, 31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let gm = 0;
+      for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) {
+        gd -= sal_a[gm];
+      }
+      return [gy, gm, gd];
+    }
+
+    function pad2(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+
+    function getSelectedGregorianDate() {
+      const y = Number(jYear.value);
+      const m = Number(jMonth.value);
+      const d = Number(jDay.value);
+      const g = jalaliToGregorian(y, m, d);
+      return g[0] + "-" + pad2(g[1]) + "-" + pad2(g[2]);
+    }
+
+    function populateDays(preferredDay) {
+      const y = Number(jYear.value);
+      const m = Number(jMonth.value);
+      const maxDays = jalaliMonthLength(y, m);
+      const currentDay = preferredDay || Number(jDay.value) || 1;
+      jDay.innerHTML = "";
+      for (let d = 1; d <= maxDays; d++) {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        jDay.appendChild(opt);
+      }
+      jDay.value = Math.min(currentDay, maxDays);
+    }
+
+    function updateJalaliPreview() {
+      const y = Number(jYear.value);
+      const m = Number(jMonth.value);
+      const d = Number(jDay.value);
+      const monthName = JALALI_MONTHS[m - 1] || "";
+      jalaliPreview.textContent = "تاریخ انتخاب‌شده: " + y + "/" + pad2(m) + "/" + pad2(d) + " (" + d + " " + monthName + " " + y + ")";
+    }
+
+    function initJalaliPicker() {
+      const now = new Date();
+      const cur = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
+
+      jYear.innerHTML = "";
+      for (let y = cur[0]; y <= cur[0] + 2; y++) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        jYear.appendChild(opt);
+      }
+      jYear.value = cur[0];
+
+      jMonth.innerHTML = "";
+      for (let idx = 0; idx < JALALI_MONTHS.length; idx++) {
+        const opt = document.createElement("option");
+        opt.value = idx + 1;
+        opt.textContent = (idx + 1) + " - " + JALALI_MONTHS[idx];
+        jMonth.appendChild(opt);
+      }
+      jMonth.value = cur[1];
+
+      populateDays(cur[2]);
+      updateJalaliPreview();
+    }
+
+    function renderSlots(bookedSet) {
+      selectedTime = "";
+      slotsContainer.innerHTML = "";
+      const booked = bookedSet || new Set();
+
+      for (let i = 0; i < WORK_SLOTS.length; i++) {
+        const slot = WORK_SLOTS[i];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "slot-btn num-font";
+        btn.textContent = slot.slice(0, 5);
+
+        if (booked.has(slot)) {
+          btn.disabled = true;
+        } else {
+          btn.addEventListener("click", function () {
+            const allBtns = document.querySelectorAll(".slot-btn");
+            for (let k = 0; k < allBtns.length; k++) {
+              allBtns[k].classList.remove("active");
+            }
+            btn.classList.add("active");
+            selectedTime = slot;
+          });
+        }
+        slotsContainer.appendChild(btn);
+      }
+    }
+
+    function fillServiceOptions(list) {
+      serviceSelect.innerHTML = '<option value="">انتخاب کنید...</option>';
+      for (let i = 0; i < list.length; i++) {
+        const s = list[i];
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.textContent = s.title;
+        serviceSelect.appendChild(opt);
+      }
+    }
+
+    async function loadServices() {
+      const fallbackServices = [
+        { id: 1, title: "اصلاح مو" },
+        { id: 2, title: "اصلاح و پیرایش کامل" },
+        { id: 3, title: "رنگ و لایت" }
+      ];
+      try {
+        const res = await fetch(SUPABASE_URL + "/rest/v1/services?is_active=eq.true&order=id.asc", { headers: headers });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const services = await res.json();
+        if (Array.isArray(services) && services.length > 0) {
+          fillServiceOptions(services);
+        } else {
+          fillServiceOptions(fallbackServices);
+        }
+      } catch (err) {
+        fillServiceOptions(fallbackServices);
+      }
+    }
+
+    async function loadSlotsForDate(dateStr) {
+      renderSlots(new Set());
+      if (!dateStr) return;
+
+      try {
+        const url = SUPABASE_URL + "/rest/v1/appointments?appt_date=eq." + encodeURIComponent(dateStr) + "&status=in.(pending,confirmed)&select=start_time";
+        const res = await fetch(url, { headers: headers });
+        if (!res.ok) throw new Error("خطا در خواندن نوبت‌ها");
+        const booked = await res.json();
+        const bookedTimes = new Set();
+        for (let i = 0; i < booked.length; i++) {
+          bookedTimes.add(booked[i].start_time);
+        }
+        renderSlots(bookedTimes);
+      } catch (err) {
+        renderSlots(new Set());
+      }
+    }
+
+    async function handleDateChange() {
+      updateJalaliPreview();
+      await loadSlotsForDate(getSelectedGregorianDate());
+    }
+
+    jYear.addEventListener("change", async function () {
+      populateDays();
+      await handleDateChange();
+    });
+
+    jMonth.addEventListener("change", async function () {
+      populateDays();
+      await handleDateChange();
+    });
+
+    jDay.addEventListener("change", handleDateChange);
+
+    bookingForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      if (!selectedTime) {
+        showMessage("لطفاً یک ساعت آزاد را انتخاب کنید.", true);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      showMessage("در حال ثبت نوبت...", false);
+
+      const gDate = getSelectedGregorianDate();
+      const jDateText = jYear.value + "/" + pad2(Number(jMonth.value)) + "/" + pad2(Number(jDay.value));
+
+      const payload = {
+        customer_name: document.getElementById("customerName").value.trim(),
+        phone: document.getElementById("phoneInput").value.trim(),
+        service_id: Number(serviceSelect.value),
+        appt_date: gDate,
+        start_time: selectedTime,
+        status: "pending"
+      };
+
+      try {
+        const postHeaders = {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        };
+
+        const res = await fetch(SUPABASE_URL + "/rest/v1/appointments", {
+          method: "POST",
+          headers: postHeaders,
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(function () { return {}; });
+          if (errData.code === "23505" || String(errData.message || "").indexOf("uq_active_slot") !== -1) {
+            showMessage("این ساعت همین الان توسط فرد دیگری رزرو شد! لطفاً ساعت دیگری انتخاب کنید.", true);
+            await loadSlotsForDate(gDate);
+          } else {
+            showMessage("ثبت نوبت انجام نشد: " + (errData.message || "خطای نامشخص"), true);
+          }
+          submitBtn.disabled = false;
+          return;
+        }
+
+        const created = await res.json();
+        const apptId = Array.isArray(created) && created[0] ? created[0].id : "";
+        showMessage("نوبت شما برای تاریخ " + jDateText + " با موفقیت ثبت شد! کد پیگیری: " + apptId, false);
+
+        const keepYear = jYear.value;
+        const keepMonth = jMonth.value;
+        const keepDay = jDay.value;
+
+        bookingForm.reset();
+        jYear.value = keepYear;
+        jMonth.value = keepMonth;
+        populateDays(Number(keepDay));
+        updateJalaliPreview();
+        await loadSlotsForDate(getSelectedGregorianDate());
+      } catch (err) {
+        showMessage("خطای شبکه هنگام ثبت نوبت رخ داد.", true);
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    initJalaliPicker();
+    renderSlots(new Set());
+    loadServices();
+    loadSlotsForDate(getSelectedGregorianDate());
+  </script>
+</body>
+</html>
