@@ -40,6 +40,8 @@ jobs:
         run: |
           export ANDROID_HOME=/usr/local/lib/android/sdk
           cd android
+          sed -i 's/com.android.tools.build:gradle:[0-9.]\+/com.android.tools.build:gradle:8.9.1/g' build.gradle app/build.gradle || true
+          sed -i 's/androidxActivityVersion = "[0-9.]\+"/androidxActivityVersion = "1.9.3"/g' variables.gradle || true
           chmod +x gradlew
           ./gradlew assembleDebug --stacktrace
 
